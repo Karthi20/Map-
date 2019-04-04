@@ -1,0 +1,184 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Map Task</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+        
+
+
+        <style>
+            button {
+             position: absolute;
+             background-color:purple;
+             color:white;
+             bottom:20px;
+            margin:100px;
+            width:10%;
+            height:10%;
+            font-family: 'Roboto','sans-serif';
+
+            
+            
+
+
+
+                   }
+     
+            body { margin:0; padding:0; }
+            #map { position:absolute; top:0; bottom:0; width:100%; }
+        </style>
+    </head>
+    <body>
+
+
+    <div id='map'></div>
+
+    <button  id='pause' onclick="stop();" value="Reset"><b>Reset</b></button>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2FydGhpY2tqaSIsImEiOiJjanRvM2Z6YmgzejJnNGJtdXM3ZDBiODU5In0.Lph9gpVx7k1BGcUhJiCKQA';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center:[77.842016,11.248261],
+        zoom: 7
+    });
+     var flightPathCoordinates = [
+                         [76.6584018,11.4119347],
+                         [77.6453557,11.3467862],
+                         [78.0329378,10.9652339],
+                         [78.6189867,10.816005],
+                         [77.9389146,10.3641416],
+                         [77.4988565,10.452932],
+                         [76.970257,10.657525],
+                         [76.6188875,10.7882494],
+                         [76.033372,11.0619439],
+                         [76.6584018,11.4119347],
+            ];
+    var len =9;
+    var id = 0;
+    function stop(){
+        map.removeLayer('route'+id);
+                flightPathCoordinates[0] =  [76.6584018,11.4119347];
+                flightPathCoordinates[1] = [77.6453557,11.3467862];
+                flightPathCoordinates[2] = [78.134078,11.2156111];
+                flightPathCoordinates[3] = [78.6189867,10.816005];
+                flightPathCoordinates[4] = [77.9389146,10.3641416];
+                flightPathCoordinates[5] = [77.4988565,10.452932];
+                flightPathCoordinates[6] = [76.970257,10.657525];
+                flightPathCoordinates[7] = [76.6188875,10.7882494];
+                flightPathCoordinates[8] = [76.033372,11.0619439];
+                flightPathCoordinates[9] = [76.6584018,11.4119347];
+                len = 9;
+                id = id + 1;
+             update();
+    }
+    function reset(){
+        if(len>1)
+        {
+            map.removeLayer('route'+id);
+        flightPathCoordinates[len-1] = flightPathCoordinates[0];
+        len = len-1;
+        id = id+1;
+        update();  
+        }
+        else
+        {
+            map.removeLayer('route'+id);
+                flightPathCoordinates[0] = [76.6584018,11.4119347];
+                flightPathCoordinates[1] = [77.6453557,11.3467862];
+                flightPathCoordinates[2] = [78.134078,11.2156111];
+                flightPathCoordinates[3] = [78.6189867,10.816005];
+                flightPathCoordinates[4] = [77.9389146,10.3641416];
+                flightPathCoordinates[5] = [77.4988565,10.452932];
+                flightPathCoordinates[6] = [76.970257,10.657525];
+                flightPathCoordinates[7] = [76.6188875,10.7882494];
+                flightPathCoordinates[8] = [76.033372,11.0619439];
+                flightPathCoordinates[9] = [76.6584018,11.4119347];
+                len = 9;
+                id = id + 1;
+             update();
+        }
+    }
+    map.on('load', function () {
+        var id = 0;
+        map.addLayer({
+            "id": "route"+id,
+            "type": "line",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                                            flightPathCoordinates[0],
+                                            flightPathCoordinates[1],
+                                             flightPathCoordinates[2],
+                                            flightPathCoordinates[3],
+                                            flightPathCoordinates[4],
+                                            flightPathCoordinates[5],
+                                            flightPathCoordinates[6],
+                                            flightPathCoordinates[7],
+                                            flightPathCoordinates[8],
+                                            flightPathCoordinates[9],
+                        ]
+                    }
+                }
+            },
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#ed6498",
+                "line-width": 8
+            }
+        });
+    time();});
+
+    function time(){
+        setInterval(function(){ reset(); }, 2000);
+    }
+    function update() {
+        map.addLayer({
+            "id": "route"+id,
+            "type": "line",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                                            flightPathCoordinates[0],
+                                            flightPathCoordinates[1],
+                                             flightPathCoordinates[2],
+                                            flightPathCoordinates[3],
+                                            flightPathCoordinates[4],
+                                             flightPathCoordinates[5],
+                                            flightPathCoordinates[6],
+                                            flightPathCoordinates[7],
+                                            flightPathCoordinates[8],
+                                            flightPathCoordinates[9],
+                        ]
+                    }
+                }
+            },
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#ed6498",
+                "line-width": 8
+            }
+        });
+    }
+    </script>
+    </body>
+    </html>
